@@ -4,30 +4,30 @@
 
 Summary:   Xorg X11 penmount input driver
 Name:      xorg-x11-drv-penmount
-Version:   1.4.0
-Release:   5%{?dist}
+Version:   1.5.0
+Release:   2%{?dist}
 URL:       http://www.x.org
 License:   MIT
 Group:     User Interface/X Hardware Support
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0:   ftp://ftp.x.org/pub/individual/driver/%{tarball}-%{version}.tar.bz2
-
-Patch1: penmount-1.4.0-abi.patch
+Patch01:   0001-Don-t-free-anything-in-PreInit-let-the-server-call-U.patch
 
 ExcludeArch: s390 s390x
 
-BuildRequires: xorg-x11-server-sdk >= 1.3.0.0-6
+BuildRequires: xorg-x11-server-sdk >= 1.10.0-1
 BuildRequires: xorg-x11-proto-devel >= 7.2-10
 
-Requires: xorg-x11-server-Xorg >= 1.3.0.0-6
+Requires:  Xorg %(xserver-sdk-abi-requires ansic)
+Requires:  Xorg %(xserver-sdk-abi-requires xinput)
 
 %description 
 X.Org X11 penmount input driver.
 
 %prep
 %setup -q -n %{tarball}-%{version}
-%patch1 -p1
+%patch01 -p1
 
 %build
 %configure --disable-static
@@ -51,6 +51,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man4/penmount.4*
 
 %changelog
+* Tue Jul 19 2011 Peter Hutterer <peter.hutterer@redhat.com> 1.5.0-2
+- Stop crashes on failed PreInit
+
+* Tue Jun 28 2011 Peter Hutterer <peter.hutterer@redhat.com> 1.5.0-1
+- penmount 1.5.0 (#713812)
+
 * Wed Jan 06 2010 Peter Hutterer <peter.hutterer@redhat.com> 1.4.0-5
 - Use global instead of define as per Packaging Guidelines.
 
